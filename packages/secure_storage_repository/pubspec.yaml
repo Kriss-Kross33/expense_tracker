@@ -1,0 +1,17 @@
+name: secure_storage_repository
+description: A dart client for managing cached data.
+version: 1.0.0
+publish_to: none
+
+environment: 
+  sdk: '>=3.4.1 <4.0.0'
+
+dependencies:
+  flutter_secure_storage: ^9.2.2
+
+dev_dependencies:
+  coverage: ^1.0.3
+  mocktail: ^1.0.4
+  flutter_test:
+    sdk: flutter
+  test:
