@@ -7,13 +7,44 @@ environment:
   sdk: '>=3.4.1 <4.0.0'
 
 dependencies:
+  equatable: ^2.0.5
+  expense_api:
+    path: packages/expense_api
+  expense_api_client:
+    path: packages/expense_api_client
+  expense_api_repository:
+    path: packages/expense_api_repository
+  get_it: ^7.6.4
+  go_router: ^14.2.7
+  formz: ^0.7.0
   flutter:
     sdk: flutter
-
+  flutter_bloc: ^8.1.6
+  flutter_secure_storage: ^9.2.2
+  formz_input:
+    path: packages/formz_input
+  fpdart: ^1.1.0
+  gap: ^3.0.1
+  http: ^1.2.2
+  hydrated_bloc: ^9.1.5
+  json_annotation: ^4.9.0
+  path_provider: ^2.1.1
+  secure_storage_repository:
+    path: packages/secure_storage_repository
 dev_dependencies:
+  bloc_test: ^9.1.7
+  build_runner: ^2.4.11
+  coverage: ^1.9.2
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  json_serializable: ^6.8.0
+  melos: ^6.1.0
+  mocktail: ^1.0.4
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/fonts/
