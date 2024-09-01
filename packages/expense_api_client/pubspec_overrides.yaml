@@ -1,0 +1,6 @@
+# melos_managed_dependency_overrides: secure_storage_repository,errors
+dependency_overrides:
+  errors:
+    path: ../errors
+  secure_storage_repository:
+    path: ../secure_storage_repository
