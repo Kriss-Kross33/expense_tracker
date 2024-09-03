@@ -1,0 +1,14 @@
+# melos_managed_dependency_overrides: errors,expense_api,expense_api_client,expense_api_repository,formz_input,secure_storage_repository
+dependency_overrides:
+  errors:
+    path: packages/errors
+  expense_api:
+    path: packages/expense_api
+  expense_api_client:
+    path: packages/expense_api_client
+  expense_api_repository:
+    path: packages/expense_api_repository
+  formz_input:
+    path: packages/formz_input
+  secure_storage_repository:
+    path: packages/secure_storage_repository
