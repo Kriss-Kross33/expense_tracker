@@ -7,6 +7,7 @@ environment:
   sdk: '>=3.4.1 <4.0.0'
 
 dependencies:
+  cached_network_image: ^3.3.1
   equatable: ^2.0.5
   expense_api:
     path: packages/expense_api
@@ -19,8 +20,14 @@ dependencies:
   formz: ^0.7.0
   flutter:
     sdk: flutter
+  image_picker: ^1.1.2
   flutter_bloc: ^8.1.6
+  firebase_core: ^3.4.0
+  firebase_storage: ^12.2.0
+  cloud_firestore: ^5.3.0
   flutter_secure_storage: ^9.2.2
+  syncfusion_flutter_charts: ^22.1.49
+  syncfusion_flutter_core: ^22.1.49
   formz_input:
     path: packages/formz_input
   fpdart: ^1.1.0
@@ -28,6 +35,7 @@ dependencies:
   http: ^1.2.2
   hydrated_bloc: ^9.1.5
   json_annotation: ^4.9.0
+  modal_bottom_sheet: ^3.0.0
   path_provider: ^2.1.1
   secure_storage_repository:
     path: packages/secure_storage_repository
@@ -38,8 +46,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_slidable: ^3.1.1
+  graphic: ^2.5.0
+  fl_chart: ^0.66.0
   json_serializable: ^6.8.0
-  melos: ^6.1.0
+  melos:
   mocktail: ^1.0.4
 
 flutter:
@@ -48,3 +59,19 @@ flutter:
   assets:
     - assets/images/
     - assets/fonts/
+
+  fonts:
+    - family: Outfit
+      fonts:
+        - asset: assets/fonts/Outfit-Bold.ttf
+          weight: 900
+        - asset: assets/fonts/Outfit-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Outfit-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Outfit-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Outfit-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Outfit-Thin.ttf
+          weight: 100
