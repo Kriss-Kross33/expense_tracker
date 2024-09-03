@@ -23,11 +23,11 @@ class ExpenseApiRepository extends ExpenseApi {
   Future<Either<Failure, Success>> login(
       {required LoginModel loginModel}) async {
     try {
-      final responseData = await _expenseApiClient.postAuth(
+      final response = await _expenseApiClient.postAuth(
         model: loginModel,
         endpoint: '/auth/login',
       );
-      final accessToken = responseData['accessToken'] as String;
+      final accessToken = response['accessToken'] as String;
       await _cacheAccessToken(accessToken);
       final decodedToken = JWT.decode(accessToken);
       final userPayload = decodedToken.payload as Map<String, dynamic>;
@@ -35,9 +35,9 @@ class ExpenseApiRepository extends ExpenseApi {
       await _cacheUser(user);
       return right(Success.instance);
     } on ServerException catch (e) {
-      return left(ServerFailure(errorMessage: e.errorMessage));
+      return Left(ServerFailure(errorMessage: e.errorMessage));
     } catch (e) {
-      return left(UnknownFailure(errorMessage: e.toString()));
+      return Left(ServerFailure(errorMessage: 'An unexpected error occurred'));
     }
   }
 
@@ -69,25 +69,39 @@ class ExpenseApiRepository extends ExpenseApi {
   @override
   Future<Either<Failure, Success>> addExpense(
       {required Expense expense}) async {
-    return _handleApiRequest(() => _expenseApiClient.post(
-          model: expense,
-          endpoint: '/expenses',
-        ));
+    try {
+      await _expenseApiClient.post(
+        model: expense,
+        endpoint: '/user/expenditure',
+      );
+      return right(Success.instance);
+    } on ServerException catch (e) {
+      return left(ServerFailure(errorMessage: e.errorMessage));
+    } catch (e) {
+      return left(UnknownFailure(errorMessage: e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> addIncome({required Income income}) async {
-    return _handleApiRequest(() => _expenseApiClient.post(
-          model: income,
-          endpoint: '/income',
-        ));
+    try {
+      await _expenseApiClient.post(
+        model: income,
+        endpoint: '/user/income',
+      );
+      return right(Success.instance);
+    } on ServerException catch (e) {
+      return left(ServerFailure(errorMessage: e.errorMessage));
+    } catch (e) {
+      return left(UnknownFailure(errorMessage: e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, Success>> deleteExpense(
       {required String expenseId}) async {
     return _handleApiRequest(() => _expenseApiClient.delete(
-          endpoint: '/expenses/$expenseId',
+          endpoint: '/user/expenditure/$expenseId',
         ));
   }
 
@@ -112,32 +126,43 @@ class ExpenseApiRepository extends ExpenseApi {
   Future<Either<Failure, Success>> deleteIncome(
       {required String incomeId}) async {
     return _handleApiRequest(() => _expenseApiClient.delete(
-          endpoint: '/income/$incomeId',
+          endpoint: '/user/income/$incomeId',
         ));
   }
 
   @override
   Future<Either<Failure, List<Expense>>> getExpenses() async {
-    return _handleApiRequestWithParsingData(
-      () => _expenseApiClient.get(endpoint: '/expenses'),
-      (data) =>
-          List<Expense>.from((data as List).map((e) => Expense.fromJson(e))),
-    );
+    try {
+      final responseData =
+          await _expenseApiClient.get(endpoint: '/user/expenditure');
+      final expenses = responseData['data'] as List<dynamic>;
+      return right(
+          List<Expense>.from(expenses.map((e) => Expense.fromJson(e))));
+    } on ServerException catch (e) {
+      return left(ServerFailure(errorMessage: e.errorMessage));
+    } catch (e) {
+      return left(UnknownFailure(errorMessage: e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, List<Income>>> getIncome() async {
-    return _handleApiRequestWithParsingData(
-      () => _expenseApiClient.get(endpoint: '/income'),
-      (data) =>
-          List<Income>.from((data as List).map((e) => Income.fromJson(e))),
-    );
+    try {
+      final responseData =
+          await _expenseApiClient.get(endpoint: '/user/income');
+      final incomes = responseData['data'] as List<dynamic>;
+      return right(List<Income>.from(incomes.map((e) => Income.fromJson(e))));
+    } on ServerException catch (e) {
+      return left(ServerFailure(errorMessage: e.errorMessage));
+    } catch (e) {
+      return left(UnknownFailure(errorMessage: e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, User>> getUser({required String userId}) async {
     return _handleApiRequestWithParsingData(
-      () => _expenseApiClient.get(endpoint: '/users/$userId'),
+      () => _expenseApiClient.get(endpoint: '/auth/user/$userId/profile'),
       (data) => User.fromJson(data),
     );
   }
@@ -164,17 +189,31 @@ class ExpenseApiRepository extends ExpenseApi {
   }
 
   @override
-  Future<Either<Failure, Expense>> getExpenseById({required String expenseId}) {
-    return _handleApiRequestWithParsingData(
-      () => _expenseApiClient.get(endpoint: '/expenses/$expenseId'),
-      (data) => Expense.fromJson(data),
-    );
+  Future<Either<Failure, Expense>> getExpenseById(
+      {required String expenseId}) async {
+    try {
+      final response = await _expenseApiClient.get(
+        endpoint: '/user/expenditure/$expenseId',
+      );
+
+      if (response['data'] == null) {
+        return Left(ServerFailure(errorMessage: 'Invalid response format'));
+      }
+
+      final expenseData = response['data'] as Map<String, dynamic>;
+      final expense = Expense.fromJson(expenseData);
+      return Right(expense);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(errorMessage: e.errorMessage));
+    } catch (e) {
+      return Left(UnknownFailure(errorMessage: e.toString()));
+    }
   }
 
   @override
   Future<Either<Failure, Income>> getIncomeById({required String incomeId}) {
     return _handleApiRequestWithParsingData(
-      () => _expenseApiClient.get(endpoint: '/income/$incomeId'),
+      () => _expenseApiClient.get(endpoint: '/user/income/$incomeId'),
       (data) => Income.fromJson(data),
     );
   }

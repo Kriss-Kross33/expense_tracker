@@ -33,6 +33,9 @@ class ExpenseApiClient {
     );
     return {
       'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      // 'User-Agent': 'PostmanRuntime/7.39.1',
     };
   }
 
@@ -48,8 +51,8 @@ class ExpenseApiClient {
   }) async {
     return _sendRequest(() async {
       final Map<String, dynamic> headers = await _getHeadersWithToken();
-      final uri = Uri.parse('$baseUrl$endpoint$path');
-      print('$baseUrl$endpoint');
+      final uri = Uri.parse('$baseUrl$endpoint');
+      print('URL: $baseUrl$endpoint');
       final response =
           await _client.get(uri, headers: headers as Map<String, String>?);
 
@@ -70,11 +73,8 @@ class ExpenseApiClient {
     return _sendRequest(() async {
       final headers = await _getHeaders();
       final uri = Uri.parse('$baseUrl$endpoint');
-      print('$baseUrl$endpoint');
-      print(await model.toJson());
-      final toJson = await model.toJson();
-      print(json.encode(toJson));
-
+      print('URL: $baseUrl$endpoint');
+      print('Json: ${json.encode(await model.toJson())}');
       final response = await _client
           .post(
             uri,
@@ -99,13 +99,10 @@ class ExpenseApiClient {
     required dynamic model,
   }) async {
     return _sendRequest(() async {
+      print('MODEL: ${json.encode(model.toJson())}');
       final headers = await _getHeadersWithToken();
+      print('HEADERS: $headers');
       final uri = Uri.parse('$baseUrl$endpoint');
-      print('$baseUrl$endpoint');
-      print(await model.toJson());
-      final toJson = await model.toJson();
-      print(json.encode(toJson));
-
       final response = await _client
           .post(
             uri,
@@ -128,7 +125,7 @@ class ExpenseApiClient {
   }) async {
     final headers = await _getHeadersWithToken();
     final url = Uri.parse(
-      '$baseUrl/$endpoint',
+      '$baseUrl$endpoint',
     );
     final response = await _client.delete(url, headers: headers);
     if (response.statusCode == 200) {
@@ -148,35 +145,24 @@ class ExpenseApiClient {
   ) async {
     try {
       final response = await callServer();
-      print(response.body);
       final responseBody = json.decode(response.body) as Map<String, dynamic>?;
-      // wayaLog.w(responseBody);
       if (responseBody == null) {
         throw const ServerException(errorMessage: 'Contact Customer Service');
       }
-      print('StatusCode: ${response.statusCode}');
       if (response.statusCode != 200 && response.statusCode != 201) {
-        print('Heeeeeeeeeeeey');
         final errorMessage = responseBody['message'] as String;
-        print('ERROR=> $errorMessage');
         throw ServerException(
           errorMessage: errorMessage,
         );
-        //  }
       }
-      print(responseBody);
       return responseBody;
     } on TimeoutException {
       throw TimeoutException('Timeout');
     } on SocketException {
       throw const ServerException(errorMessage: 'No internet');
-    } on ServerException catch (e) {
-      print(e);
+    } on ServerException {
       rethrow;
     } catch (e) {
-      // await FirebaseCrashlytics.instance
-      //     .recordError(e, null, reason: 'a non-fatal error');
-      print(e);
       throw const ServerException(errorMessage: 'Unknown Error');
     }
   }

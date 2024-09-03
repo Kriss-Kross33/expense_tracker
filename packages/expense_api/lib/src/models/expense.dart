@@ -9,15 +9,16 @@ part 'expense.g.dart';
 @JsonSerializable()
 class Expense extends Equatable {
   /// The id of the expense
-  final String id;
+  @JsonKey(includeToJson: false)
+  final String? id;
 
   /// The category of the expense
   final String category;
   final String nameOfItem;
-  final double estimatedAmount;
+  final dynamic estimatedAmount;
 
   const Expense({
-    required this.id,
+    this.id,
     required this.category,
     required this.nameOfItem,
     required this.estimatedAmount,
@@ -27,6 +28,27 @@ class Expense extends Equatable {
       _$ExpenseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExpenseToJson(this);
+
+  Expense copyWith({
+    String? id,
+    String? category,
+    String? nameOfItem,
+    dynamic estimatedAmount,
+  }) {
+    return Expense(
+      id: id ?? this.id,
+      category: category ?? this.category,
+      nameOfItem: nameOfItem ?? this.nameOfItem,
+      estimatedAmount: estimatedAmount ?? this.estimatedAmount,
+    );
+  }
+
+  static const empty = Expense(
+    id: '',
+    category: '',
+    nameOfItem: '',
+    estimatedAmount: 0.0,
+  );
 
   @override
   List<Object?> get props => [id, category, nameOfItem, estimatedAmount];
