@@ -15,13 +15,13 @@ class SignupCubit extends Cubit<SignupState> {
 
   final ExpenseApiRepository _expenseApiRepository;
 
-  void onUsernameInput(String usernameString) {
-    final username = Field.dirty(usernameString);
+  void onUsernameInput(String nameString) {
+    final name = Field.dirty(nameString);
     emit(
       state.copyWith(
-        username: username,
+        name: name,
         isValid: Formz.validate([
-          username,
+          name,
           state.email,
           state.password,
           state.confirmPassword,
@@ -39,7 +39,7 @@ class SignupCubit extends Cubit<SignupState> {
         isValid: Formz.validate(
           [
             email,
-            state.username,
+            state.name,
             state.password,
             state.confirmPassword,
           ],
@@ -63,7 +63,7 @@ class SignupCubit extends Cubit<SignupState> {
           [
             password,
             confirmPassword,
-            state.username,
+            state.name,
             state.email,
           ],
         ),
@@ -83,7 +83,7 @@ class SignupCubit extends Cubit<SignupState> {
         isValid: Formz.validate(
           [
             confirmPassword,
-            state.username,
+            state.name,
             state.email,
             state.password,
           ],
@@ -101,7 +101,7 @@ class SignupCubit extends Cubit<SignupState> {
       );
       final eitherFailureOrSuccess = await _expenseApiRepository.signup(
         signupModel: SignupModel(
-          name: state.username.value,
+          name: state.name.value,
           email: state.email.value,
           password: state.password.value,
         ),

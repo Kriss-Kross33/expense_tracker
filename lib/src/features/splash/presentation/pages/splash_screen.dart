@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> handleWaitingLogic() async {
     _timer = Timer(const Duration(seconds: 3), () async {
       if (mounted) {
-        context.pushReplacement(RouteConsts.loginRoute);
+        context.pushReplacement(RouteConsts.homeRoute);
       }
     });
   }
@@ -35,13 +35,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-          'Splash Screen',
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return Scaffold(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.deepPurple,
+              Colors.indigo,
+            ],
+          ),
+        ),
+        child: const Center(
+          child: Text(
+            'Wallet',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),

@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/foundation.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'theme_state.dart';
@@ -17,7 +16,7 @@ class ThemeCubit extends HydratedCubit<ThemeState> {
   @override
   Map<String, dynamic>? toJson(ThemeState state) {
     Map<String, dynamic> data = {};
-    String theme = describeEnum(state.themeMode);
+    String theme = state.themeMode.name;
     data['themeMode'] = theme;
     return data;
   }

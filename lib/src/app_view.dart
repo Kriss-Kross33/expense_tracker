@@ -1,3 +1,5 @@
+import 'package:expense_api_repository/expense_api_repository.dart';
+import 'package:expense_track/src/common/blocs/expense_cubit/expense_cubit.dart';
 import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/core/core.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +22,11 @@ class AppView extends StatelessWidget {
         BlocProvider(
           create: (context) => ThemeCubit(),
         ),
-        // BlocProvider<NavBarCubit>(
-        //   create: (context) => NavBarCubit(),
-        // ),
+        BlocProvider(
+          create: (context) => ExpenseApiCubit(
+            expenseApiRepository: context.read<ExpenseApiRepository>(),
+          ),
+        ),
       ],
       child: BlocBuilder<ThemeCubit, ThemeState>(
         builder: (context, state) {

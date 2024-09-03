@@ -2,7 +2,7 @@ import 'package:expense_track/src/core/core.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const fontFamily = 'Roboto';
+  static const fontFamily = 'Outfit';
   static ThemeData get light {
     return ThemeData(
       fontFamily: fontFamily,

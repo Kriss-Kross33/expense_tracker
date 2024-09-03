@@ -1,4 +1,5 @@
 import 'package:expense_track/src/core/core.dart';
+import 'package:expense_track/src/features/features.dart';
 import 'package:expense_track/src/features/home/cubits/cubits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,18 +13,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final screens = <Widget>[
-    Container(),
-    Container(),
-    Container(),
+    const DashboardScreen(),
+    const ExpenditureScreen(),
+    const ProfileAndSettingsScreen(),
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NavBarCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => NavBarCubit(),
+        ),
+      ],
       child: BlocBuilder<NavBarCubit, NavBarState>(
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: ColorConsts.offWhite,
             bottomNavigationBar: Container(
               decoration: const BoxDecoration(),
               child: Column(
@@ -32,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                   TabIndicators(
                     activeColor: ColorConsts.primaryColor,
                     inactiveColor: ColorConsts.white,
-                    numTabs: screens.length,
+                    numTabs: 3,
                     height: 5,
                     padding: 0,
                     currentIndex: state.index,
@@ -59,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                           AssetConsts.home,
                           height: 26,
                           width: 40,
+                          color: Colors.white38,
                         ),
                         activeIcon: Image.asset(
                           AssetConsts.home,
@@ -70,26 +82,28 @@ class _HomePageState extends State<HomePage> {
                       ),
                       BottomNavigationBarItem(
                         icon: Image.asset(
-                          AssetConsts.history,
+                          AssetConsts.expenses,
                           height: 26,
                           width: 40,
+                          color: Colors.white38,
                         ),
                         activeIcon: Image.asset(
-                          AssetConsts.history,
+                          AssetConsts.expenses,
                           height: 26,
                           width: 40,
                           color: Colors.white,
                         ),
-                        label: 'Learn',
+                        label: 'Expenditure',
                       ),
                       BottomNavigationBarItem(
                         icon: Image.asset(
-                          AssetConsts.profile,
+                          AssetConsts.settings,
                           height: 26,
                           width: 40,
+                          color: Colors.white38,
                         ),
                         activeIcon: Image.asset(
-                          AssetConsts.profile,
+                          AssetConsts.settings,
                           height: 26,
                           width: 40,
                           color: Colors.white,
@@ -101,10 +115,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            body: IndexedStack(
-              index: state.index,
-              children: screens,
-            ),
+            body: screens[state.index],
           );
         },
       ),

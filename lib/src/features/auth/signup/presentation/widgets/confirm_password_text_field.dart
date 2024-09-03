@@ -21,63 +21,27 @@ class _ConfirmPasswordTextFieldState extends State<_ConfirmPasswordTextField> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    blurRadius: 5.0,
-                    spreadRadius: 0.2,
-                    offset: Offset(0, 2),
-                  )
-                ],
-              ),
-              child: TextField(
-                obscureText: showPassword ? false : true,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                decoration: InputDecoration(
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        showPassword = !showPassword;
-                      });
-                    },
-                    child: showPassword
-                        ? Image.asset(AssetConsts.visibilityOff)
-                        : Image.asset(AssetConsts.visibility),
-                  ),
-                  hintText: 'Re-type your password',
-                  hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onPrimary
-                            .withOpacity(0.5),
-                      ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(
-                      color: ColorConsts.primaryColor,
-                    ),
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
+            CustomTextField(
+              textFieldkey: const Key('__confirmPasswordSignupTextField'),
+              isValid:
+                  state.confirmPassword.displayError != null ? false : null,
+              suffixIcon: IconButton(
+                onPressed: () => setState(() => showPassword = !showPassword),
+                icon: Icon(
+                  showPassword ? Icons.visibility : Icons.visibility_off,
                 ),
-                onChanged: (String passwordString) => context
-                    .read<SignupCubit>()
-                    .onConfirmPasswordInput(passwordString),
               ),
+              hintText: 'Confirm your password',
+              keyboardType: TextInputType.visiblePassword,
+              onChanged: (String confirmPasswordString) => context
+                  .read<SignupCubit>()
+                  .onConfirmPasswordInput(confirmPasswordString),
             ),
             SizedBox(
               child: state.confirmPassword.displayError == null
                   ? const SizedBox.shrink()
                   : const Padding(
-                      padding: EdgeInsets.only(left: 15),
+                      padding: EdgeInsets.only(left: 5),
                       child: Text(
                         'Passwords do not match',
                         style: TextStyle(

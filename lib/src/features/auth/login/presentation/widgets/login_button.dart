@@ -37,8 +37,11 @@ class _LoginButton extends StatelessWidget {
               builder: (context, state) {
                 return ElevatedButton(
                   style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                     elevation: 0,
-                    backgroundColor: ColorConsts.lightGreen,
+                    backgroundColor: ColorConsts.violet,
                   ),
                   onPressed: !state.isValid
                       ? null
@@ -48,7 +51,7 @@ class _LoginButton extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const CupertinoActivityIndicator(
-                              color: ColorConsts.black,
+                              color: ColorConsts.white,
                             ),
                             const SizedBox(
                               width: 8,
@@ -59,7 +62,7 @@ class _LoginButton extends StatelessWidget {
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -70,7 +73,7 @@ class _LoginButton extends StatelessWidget {
                           'Sign in',
                           style:
                               Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: ColorConsts.black,
+                                    color: Colors.white,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
                                   ),

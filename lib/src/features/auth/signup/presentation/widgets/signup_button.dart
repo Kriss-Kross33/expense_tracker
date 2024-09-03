@@ -34,8 +34,11 @@ class _SignupButton extends StatelessWidget {
           builder: (context, state) {
             return ElevatedButton(
               style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 elevation: 0,
-                backgroundColor: ColorConsts.lightGreen,
+                backgroundColor: ColorConsts.violet,
               ),
               onPressed: !state.isValid
                   ? null
@@ -56,7 +59,7 @@ class _SignupButton extends StatelessWidget {
                               Theme.of(context).textTheme.bodyLarge?.copyWith(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w600,
-                                    color: ColorConsts.black,
+                                    color: ColorConsts.white,
                                   ),
                         ),
                       ],
@@ -66,7 +69,7 @@ class _SignupButton extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: ColorConsts.black,
+                            color: ColorConsts.white,
                           ),
                     ),
             );

@@ -1,4 +1,5 @@
 import 'package:expense_api_repository/expense_api_repository.dart';
+import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/core/core.dart';
 import 'package:expense_track/src/features/auth/auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +42,7 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        'Cerene',
+                        'Wallet',
                         textAlign: TextAlign.center,
                         style: Theme.of(context)
                             .textTheme
@@ -52,27 +53,30 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const Gap(20),
                     Center(
-                      child: Image.asset(
-                        AssetConsts.loginImg,
-                        height: 120,
-                        width: 120,
-                      ),
-                    ),
-                    const Gap(20),
-                    Center(
                       child: Text(
-                        'Improving emotional wellness',
+                        'Simplify your expenses',
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
-                    const Gap(14),
+                    const Gap(80),
+                    Center(
+                      child: Text(
+                        'Login',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    const Gap(20),
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        'Email *',
+                        'Email',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
                             ),
                       ),
                     ),
@@ -82,10 +86,10 @@ class LoginScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 4),
                       child: Text(
-                        'Password *',
+                        'Password',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
                             ),
                       ),
                     ),
@@ -108,7 +112,7 @@ class LoginScreen extends StatelessWidget {
                           'Dont\'t have an account?',
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge
+                              .titleMedium
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),

@@ -1,4 +1,5 @@
 import 'package:expense_api_repository/expense_api_repository.dart';
+import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/core/core.dart';
 import 'package:expense_track/src/features/auth/auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,42 +49,44 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
             child: LayoutBuilder(builder: (context, constraints) {
               return Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
                 child: Column(
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Cerene',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayLarge
-                              ?.copyWith(
-                                fontSize: 34,
-                                fontWeight: FontWeight.w800,
-                              ),
+                        Center(
+                          child: Text(
+                            'Sign up',
+                            style: Theme.of(context)
+                                .textTheme
+                                .displayLarge
+                                ?.copyWith(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                          ),
                         ),
-                        Text(
-                          'Begin your journey to emotional wellness',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(
-                                  fontSize: 14, fontWeight: FontWeight.w400),
+                        const Gap(10),
+                        Center(
+                          child: Text(
+                            'Fill your details to create an account',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
+                                    fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
                         ),
                         const Gap(31),
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: Text(
-                            'First name *',
+                            'Full name',
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 14,
                                     ),
                           ),
@@ -94,10 +97,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: Text(
-                            'Email *',
+                            'Email',
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 14,
                                     ),
                           ),
@@ -108,71 +112,31 @@ class _SignupScreenState extends State<SignupScreen> {
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: Text(
-                            'Password *',
+                            'Password',
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 14,
                                     ),
                           ),
                         ),
                         const Gap(4),
                         const _PasswordTextField(),
-                        const Gap(10),
-                        Text(
-                          'NB: Your password should have a minimum of six(6) characters',
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                        ),
-                        const Gap(20),
+                        const Gap(19),
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: Text(
-                            'Retype password *',
+                            'Confirm password',
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      fontWeight: FontWeight.w500,
+                                      fontWeight: FontWeight.w400,
                                       fontSize: 14,
                                     ),
                           ),
                         ),
                         const Gap(4),
                         const _ConfirmPasswordTextField(),
-                        const Gap(25),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: RichText(
-                                  text: TextSpan(children: [
-                                TextSpan(
-                                  text: 'I have read and accept the ',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontSize: 11,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                ),
-                                TextSpan(
-                                  text: ' of using Cerene',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        fontSize: 11,
-                                        fontStyle: FontStyle.italic,
-                                      ),
-                                ),
-                              ])),
-                            )
-                          ],
-                        ),
-                        const Gap(15),
+                        const Gap(45),
                         _SignupButton(constraints: constraints),
                         const Gap(13),
                         Row(
