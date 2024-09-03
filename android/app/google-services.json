@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "332343858798",
+    "project_id": "wallet-assesment",
+    "storage_bucket": "wallet-assesment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332343858798:android:a0ef683b5d22765c77b87f",
+        "android_client_info": {
+          "package_name": "com.walletassesment.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXHNuWpqC_4H1xKiJBm8e0DKhLV_rG_uI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
