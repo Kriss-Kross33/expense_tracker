@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> handleWaitingLogic() async {
     _timer = Timer(const Duration(seconds: 3), () async {
       if (mounted) {
-        context.pushReplacement(RouteConsts.homeRoute);
+        context.pushReplacement(RouteConsts.loginRoute);
       }
     });
   }
