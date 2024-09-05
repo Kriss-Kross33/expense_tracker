@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:expense_track/src/common/blocs/theme_cubit/theme_cubit.dart';
+import 'package:expense_track/src/core/core.dart';
 import 'package:expense_track/src/features/profile_and_settings/presentation/cubits/cubits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileAndSettingsScreen extends StatefulWidget {
@@ -87,7 +89,7 @@ class _ProfileAndSettingsScreenState extends State<ProfileAndSettingsScreen> {
                   title: const Text('Logout'),
                   onTap: () {
                     // context.read<AuthCubit>().logOut();
-                    // context.go('/login');
+                    context.go(RouteConsts.loginRoute);
                   },
                 ),
               ],
