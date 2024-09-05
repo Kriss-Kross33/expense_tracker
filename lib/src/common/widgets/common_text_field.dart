@@ -24,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     this.labelText,
     this.showTextFieldInputBorder = false,
     this.lableStyle,
+    this.style,
     this.isValid,
     this.inputFormatters,
     this.maxLength,
@@ -32,6 +33,9 @@ class CustomTextField extends StatelessWidget {
 
   /// Key used to identify the text field.
   final Key textFieldkey;
+
+  /// Style of the text field
+  final TextStyle? style;
 
   /// Error text to be displayed on failed validation.
   final String? errorText;
@@ -103,9 +107,10 @@ class CustomTextField extends StatelessWidget {
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 maxLength: maxLength,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: ColorConsts.black,
-                    ),
+                style: style ??
+                    Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: ColorConsts.black,
+                        ),
                 decoration: InputDecoration(
                   suffixIcon: suffixIcon,
                   hintText: hintText,
