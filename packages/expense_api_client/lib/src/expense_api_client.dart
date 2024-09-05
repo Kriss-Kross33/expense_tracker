@@ -34,8 +34,6 @@ class ExpenseApiClient {
     return {
       'Authorization': 'Bearer $accessToken',
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      // 'User-Agent': 'PostmanRuntime/7.39.1',
     };
   }
 
@@ -45,14 +43,13 @@ class ExpenseApiClient {
   /// path: The path to get the resource from.
   ///
   /// Returns the response from the API.
-  Future<Map<String, dynamic>> get({
+  Future<Response> get({
     required String endpoint,
     String path = '',
   }) async {
     return _sendRequest(() async {
       final Map<String, dynamic> headers = await _getHeadersWithToken();
       final uri = Uri.parse('$baseUrl$endpoint');
-      print('URL: $baseUrl$endpoint');
       final response =
           await _client.get(uri, headers: headers as Map<String, String>?);
 
@@ -66,15 +63,13 @@ class ExpenseApiClient {
   /// model: The model to post to the API.
   ///
   /// Returns the response from the API.
-  Future<Map<String, dynamic>> postAuth({
+  Future<Response> postAuth({
     required String endpoint,
     required dynamic model,
   }) async {
     return _sendRequest(() async {
       final headers = await _getHeaders();
       final uri = Uri.parse('$baseUrl$endpoint');
-      print('URL: $baseUrl$endpoint');
-      print('Json: ${json.encode(await model.toJson())}');
       final response = await _client
           .post(
             uri,
@@ -84,6 +79,7 @@ class ExpenseApiClient {
             ),
           )
           .timeout(const Duration(seconds: 45));
+
       return response;
     });
   }
@@ -94,14 +90,12 @@ class ExpenseApiClient {
   /// model: The model to post to the API.
   ///
   /// Returns the response from the API.
-  Future<Map<String, dynamic>> post({
+  Future<Response> post({
     required String endpoint,
     required dynamic model,
   }) async {
     return _sendRequest(() async {
-      print('MODEL: ${json.encode(model.toJson())}');
       final headers = await _getHeadersWithToken();
-      print('HEADERS: $headers');
       final uri = Uri.parse('$baseUrl$endpoint');
       final response = await _client
           .post(
@@ -140,22 +134,20 @@ class ExpenseApiClient {
   /// callServer: The function to call to send the request.
   ///
   /// Returns the response from the API.
-  Future<Map<String, dynamic>> _sendRequest(
+  Future<Response> _sendRequest(
     Future<Response> Function() callServer,
   ) async {
     try {
       final response = await callServer();
-      final responseBody = json.decode(response.body) as Map<String, dynamic>?;
-      if (responseBody == null) {
-        throw const ServerException(errorMessage: 'Contact Customer Service');
-      }
       if (response.statusCode != 200 && response.statusCode != 201) {
-        final errorMessage = responseBody['message'] as String;
+        final responseBody = json.decode(response.body);
+        print(responseBody);
+        final errorMessage = responseBody['error'] as String;
         throw ServerException(
           errorMessage: errorMessage,
         );
       }
-      return responseBody;
+      return response;
     } on TimeoutException {
       throw TimeoutException('Timeout');
     } on SocketException {

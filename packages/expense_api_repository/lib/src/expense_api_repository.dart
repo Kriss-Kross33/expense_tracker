@@ -27,18 +27,46 @@ class ExpenseApiRepository extends ExpenseApi {
         model: loginModel,
         endpoint: '/auth/login',
       );
-      final accessToken = response['accessToken'] as String;
+
+      final responseBody = response.body;
+
+      final Map<String, dynamic> responseData = json.decode(responseBody);
+      final accessToken = responseData['accessToken'] as String?;
+      if (accessToken == null) {
+        return left(ServerFailure(
+            errorMessage: 'Access token is missing from the response'));
+      }
+      print('accessToken: $accessToken');
       await _cacheAccessToken(accessToken);
-      final decodedToken = JWT.decode(accessToken);
-      final userPayload = decodedToken.payload as Map<String, dynamic>;
-      final user = User(id: userPayload['user_id'] as String);
-      await _cacheUser(user);
+      await _cacheUserFromToken(accessToken);
+
       return right(Success.instance);
     } on ServerException catch (e) {
-      return Left(ServerFailure(errorMessage: e.errorMessage));
+      return left(ServerFailure(errorMessage: e.errorMessage));
     } catch (e) {
-      return Left(ServerFailure(errorMessage: 'An unexpected error occurred'));
+      return left(UnknownFailure(
+          errorMessage: 'An unexpected error occurred during login'));
     }
+  }
+
+  Future<void> _cacheAccessToken(String accessToken) async {
+    await _secureStorageRepository.write(
+      key: SecureStorageConstants.accessToken,
+      value: accessToken,
+    );
+  }
+
+  Future<void> _cacheUserFromToken(String accessToken) async {
+    final jwtToken = JWT.decode(accessToken);
+    print('jwtToken: ${jwtToken.payload}');
+    final userId = jwtToken.payload['userId'] as String?;
+    if (userId == null) {
+      throw ServerException(errorMessage: 'User ID is missing from the token');
+    }
+    await _secureStorageRepository.write(
+      key: SecureStorageConstants.user,
+      value: jsonEncode({'userId': userId}),
+    );
   }
 
   Future<void> _cacheUser(User user) async {
@@ -46,13 +74,6 @@ class ExpenseApiRepository extends ExpenseApi {
     await _secureStorageRepository.write(
       key: SecureStorageConstants.user,
       value: userEncoded,
-    );
-  }
-
-  Future<void> _cacheAccessToken(String accessToken) async {
-    await _secureStorageRepository.write(
-      key: SecureStorageConstants.accessToken,
-      value: accessToken,
     );
   }
 
@@ -131,32 +152,25 @@ class ExpenseApiRepository extends ExpenseApi {
   }
 
   @override
-  Future<Either<Failure, List<Expense>>> getExpenses() async {
-    try {
-      final responseData =
-          await _expenseApiClient.get(endpoint: '/user/expenditure');
-      final expenses = responseData['data'] as List<dynamic>;
-      return right(
-          List<Expense>.from(expenses.map((e) => Expense.fromJson(e))));
-    } on ServerException catch (e) {
-      return left(ServerFailure(errorMessage: e.errorMessage));
-    } catch (e) {
-      return left(UnknownFailure(errorMessage: e.toString()));
-    }
+  Future<Either<Failure, List<Expense>>> getExpenses() {
+    return _handleApiRequestWithParsingData(
+        () => _expenseApiClient.get(endpoint: '/user/expenditure'), (data) {
+      final responseData = json.decode(data.body) as List<dynamic>;
+      return List<Expense>.from((responseData).map((e) => Expense.fromJson(e)));
+    });
   }
 
   @override
-  Future<Either<Failure, List<Income>>> getIncome() async {
-    try {
-      final responseData =
-          await _expenseApiClient.get(endpoint: '/user/income');
-      final incomes = responseData['data'] as List<dynamic>;
-      return right(List<Income>.from(incomes.map((e) => Income.fromJson(e))));
-    } on ServerException catch (e) {
-      return left(ServerFailure(errorMessage: e.errorMessage));
-    } catch (e) {
-      return left(UnknownFailure(errorMessage: e.toString()));
-    }
+  Future<Either<Failure, List<Income>>> getIncome() {
+    return _handleApiRequestWithParsingData(
+      () => _expenseApiClient.get(endpoint: '/user/income'),
+      (data) {
+        final responseData = json.decode(data.body) as List<dynamic>;
+        return List<Income>.from(
+          (responseData).map((e) => Income.fromJson(e)),
+        );
+      },
+    );
   }
 
   @override
@@ -191,23 +205,10 @@ class ExpenseApiRepository extends ExpenseApi {
   @override
   Future<Either<Failure, Expense>> getExpenseById(
       {required String expenseId}) async {
-    try {
-      final response = await _expenseApiClient.get(
-        endpoint: '/user/expenditure/$expenseId',
-      );
-
-      if (response['data'] == null) {
-        return Left(ServerFailure(errorMessage: 'Invalid response format'));
-      }
-
-      final expenseData = response['data'] as Map<String, dynamic>;
-      final expense = Expense.fromJson(expenseData);
-      return Right(expense);
-    } on ServerException catch (e) {
-      return Left(ServerFailure(errorMessage: e.errorMessage));
-    } catch (e) {
-      return Left(UnknownFailure(errorMessage: e.toString()));
-    }
+    return _handleApiRequestWithParsingData(
+      () => _expenseApiClient.get(endpoint: '/user/expenditure/$expenseId'),
+      (data) => Expense.fromJson(data),
+    );
   }
 
   @override
