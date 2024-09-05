@@ -1,3 +1,4 @@
+import 'package:expense_track/src/common/blocs/theme_cubit/theme_cubit.dart';
 import 'package:expense_track/src/core/core.dart';
 import 'package:expense_track/src/features/features.dart';
 import 'package:expense_track/src/features/home/cubits/cubits.dart';
@@ -33,89 +34,102 @@ class _HomePageState extends State<HomePage> {
       ],
       child: BlocBuilder<NavBarCubit, NavBarState>(
         builder: (context, state) {
-          return Scaffold(
-            backgroundColor: ColorConsts.offWhite,
-            bottomNavigationBar: Container(
-              decoration: const BoxDecoration(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TabIndicators(
-                    activeColor: ColorConsts.primaryColor,
-                    inactiveColor: ColorConsts.white,
-                    numTabs: 3,
-                    height: 5,
-                    padding: 0,
-                    currentIndex: state.index,
-                  ),
-                  BottomNavigationBar(
-                    backgroundColor: ColorConsts.primaryColor,
-                    selectedItemColor: ColorConsts.white,
-                    unselectedItemColor: ColorConsts.grey,
-                    onTap: (index) =>
-                        context.read<NavBarCubit>().onTabSelected(index),
-                    type: BottomNavigationBarType.fixed,
-                    currentIndex: state.index,
-                    unselectedLabelStyle: const TextStyle(
-                      color: ColorConsts.grey,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    selectedLabelStyle: const TextStyle(
-                      color: ColorConsts.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    items: [
-                      BottomNavigationBarItem(
-                        icon: Image.asset(
-                          AssetConsts.home,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white38,
-                        ),
-                        activeIcon: Image.asset(
-                          AssetConsts.home,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white,
-                        ),
-                        label: 'Home',
+          return BlocBuilder<ThemeCubit, ThemeState>(
+            builder: (context, themestate) {
+              return Scaffold(
+                backgroundColor: themestate.themeMode == AppThemeMode.lightMode
+                    ? ColorConsts.offWhite
+                    : ColorConsts.black,
+                bottomNavigationBar: Container(
+                  decoration: const BoxDecoration(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      BlocBuilder<ThemeCubit, ThemeState>(
+                        builder: (context, themeState) {
+                          return TabIndicators(
+                            activeColor: ColorConsts.primaryColor,
+                            inactiveColor:
+                                themeState.themeMode == AppThemeMode.lightMode
+                                    ? ColorConsts.white
+                                    : ColorConsts.black,
+                            numTabs: 3,
+                            height: 5,
+                            padding: 0,
+                            currentIndex: state.index,
+                          );
+                        },
                       ),
-                      BottomNavigationBarItem(
-                        icon: Image.asset(
-                          AssetConsts.expenses,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white38,
+                      BottomNavigationBar(
+                        backgroundColor: ColorConsts.primaryColor,
+                        selectedItemColor: ColorConsts.white,
+                        unselectedItemColor: ColorConsts.grey,
+                        onTap: (index) =>
+                            context.read<NavBarCubit>().onTabSelected(index),
+                        type: BottomNavigationBarType.fixed,
+                        currentIndex: state.index,
+                        unselectedLabelStyle: const TextStyle(
+                          color: ColorConsts.grey,
+                          fontWeight: FontWeight.w500,
                         ),
-                        activeIcon: Image.asset(
-                          AssetConsts.expenses,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white,
+                        selectedLabelStyle: const TextStyle(
+                          color: ColorConsts.white,
+                          fontWeight: FontWeight.w500,
                         ),
-                        label: 'Expenditure',
-                      ),
-                      BottomNavigationBarItem(
-                        icon: Image.asset(
-                          AssetConsts.settings,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white38,
-                        ),
-                        activeIcon: Image.asset(
-                          AssetConsts.settings,
-                          height: 26,
-                          width: 40,
-                          color: Colors.white,
-                        ),
-                        label: 'Profile',
+                        items: [
+                          BottomNavigationBarItem(
+                            icon: Image.asset(
+                              AssetConsts.home,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white38,
+                            ),
+                            activeIcon: Image.asset(
+                              AssetConsts.home,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white,
+                            ),
+                            label: 'Home',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Image.asset(
+                              AssetConsts.expenses,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white38,
+                            ),
+                            activeIcon: Image.asset(
+                              AssetConsts.expenses,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white,
+                            ),
+                            label: 'Expenditure',
+                          ),
+                          BottomNavigationBarItem(
+                            icon: Image.asset(
+                              AssetConsts.settings,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white38,
+                            ),
+                            activeIcon: Image.asset(
+                              AssetConsts.settings,
+                              height: 26,
+                              width: 40,
+                              color: Colors.white,
+                            ),
+                            label: 'Profile',
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            body: screens[state.index],
+                ),
+                body: screens[state.index],
+              );
+            },
           );
         },
       ),

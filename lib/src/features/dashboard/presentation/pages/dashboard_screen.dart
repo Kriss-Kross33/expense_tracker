@@ -116,7 +116,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         ExpenseApiState>(
                                       builder: (context, state) {
                                         return Text(
-                                          '${state.balance < 0 ? '-' : ''}\$${state.balance.abs()}',
+                                          '${state.balance < 0 ? '-' : ''}GHs ${state.balance.abs()}',
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 22,
@@ -177,7 +177,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 ExpenseApiState>(
                                               builder: (context, state) {
                                                 return Text(
-                                                  '\$${state.totalIncome}',
+                                                  'GH¢${state.totalIncome}',
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
@@ -244,7 +244,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                 ExpenseApiState>(
                                               builder: (context, state) {
                                                 return Text(
-                                                  '\$${state.totalExpense}',
+                                                  'GH¢${state.totalExpense}',
                                                   style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 20,
@@ -304,93 +304,110 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: BlocBuilder<ExpenseApiCubit, ExpenseApiState>(
-                          builder: (context, state) {
-                            final totalIncome = state.totalIncome;
-                            final totalExpense = state.totalExpense;
-                            final total = totalIncome + totalExpense;
-                            final incomePercentage = total > 0
-                                ? (totalIncome / total * 100).round()
-                                : 0;
-                            final expensePercentage = total > 0
-                                ? (totalExpense / total * 100).round()
-                                : 0;
+                      BlocBuilder<ThemeCubit, ThemeState>(
+                        builder: (context, themestate) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              color:
+                                  themestate.themeMode == AppThemeMode.lightMode
+                                      ? Colors.grey[200]
+                                      : Colors.black.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child:
+                                BlocBuilder<ExpenseApiCubit, ExpenseApiState>(
+                              builder: (context, state) {
+                                final totalIncome = state.totalIncome;
+                                final totalExpense = state.totalExpense;
+                                final total = totalIncome + totalExpense;
+                                final incomePercentage = total > 0
+                                    ? (totalIncome / total * 100).round()
+                                    : 0;
+                                final expensePercentage = total > 0
+                                    ? (totalExpense / total * 100).round()
+                                    : 0;
 
-                            return SfCircularChart(
-                              title: ChartTitle(
-                                text: 'Income vs Expenses',
-                                textStyle: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              legend: const Legend(
-                                  isVisible: true,
-                                  position: LegendPosition.bottom),
-                              series: <CircularSeries>[
-                                DoughnutSeries<FinancialData, String>(
-                                  innerRadius: '70%',
-                                  dataSource: [
-                                    FinancialData(
-                                        category: 'Income',
-                                        percentage: incomePercentage,
-                                        color: const Color(0xFF0e6085)),
-                                    FinancialData(
-                                        category: 'Expenses',
-                                        percentage: expensePercentage,
-                                        color: const Color(0xFFdf6188)),
-                                  ],
-                                  xValueMapper: (FinancialData data, _) =>
-                                      data.category,
-                                  yValueMapper: (FinancialData data, _) =>
-                                      data.percentage,
-                                  pointColorMapper: (FinancialData data, _) =>
-                                      data.color,
-                                  dataLabelSettings: DataLabelSettings(
-                                    isVisible: true,
-                                    labelPosition:
-                                        ChartDataLabelPosition.outside,
-                                    builder: (data, point, series, pointIndex,
-                                        seriesIndex) {
-                                      return Container(
-                                        padding: const EdgeInsets.all(4),
-                                        child: Text(
-                                          '${(data as FinancialData).category}\n${(data).percentage}%',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                              annotations: <CircularChartAnnotation>[
-                                CircularChartAnnotation(
-                                  widget: Container(
-                                    child: Text(
-                                      'Total\n\$${total.toStringAsFixed(2)}',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                return SfCircularChart(
+                                  title: ChartTitle(
+                                    text: 'Income vs Expenses',
+                                    textStyle: TextStyle(
+                                      color: themestate.themeMode ==
+                                              AppThemeMode.lightMode
+                                          ? Colors.black
+                                          : Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                                  legend: const Legend(
+                                      isVisible: true,
+                                      position: LegendPosition.bottom),
+                                  series: <CircularSeries>[
+                                    DoughnutSeries<FinancialData, String>(
+                                      innerRadius: '70%',
+                                      radius: '95%',
+                                      dataSource: [
+                                        FinancialData(
+                                            category: 'Income',
+                                            percentage: incomePercentage,
+                                            color: themestate.themeMode ==
+                                                    AppThemeMode.lightMode
+                                                ? const Color(0xFF0e6085)
+                                                : const Color(0xFF0e6085)),
+                                        FinancialData(
+                                            category: 'Expenses',
+                                            percentage: expensePercentage,
+                                            color: themestate.themeMode ==
+                                                    AppThemeMode.lightMode
+                                                ? const Color(0xFFdf6188)
+                                                : const Color(0xFFdf6188)),
+                                      ],
+                                      xValueMapper: (FinancialData data, _) =>
+                                          data.category,
+                                      yValueMapper: (FinancialData data, _) =>
+                                          data.percentage,
+                                      pointColorMapper:
+                                          (FinancialData data, _) => data.color,
+                                      dataLabelMapper: (FinancialData data,
+                                              _) =>
+                                          '${data.category}\n${data.percentage}%',
+                                      dataLabelSettings: DataLabelSettings(
+                                        isVisible: true,
+                                        labelPosition:
+                                            ChartDataLabelPosition.outside,
+                                        textStyle: TextStyle(
+                                          color: themestate.themeMode ==
+                                                  AppThemeMode.lightMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                  annotations: <CircularChartAnnotation>[
+                                    CircularChartAnnotation(
+                                      widget: Container(
+                                        child: Text(
+                                          'Total\nGH¢${total.toStringAsFixed(2)}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: themestate.themeMode ==
+                                                    AppThemeMode.lightMode
+                                                ? Colors.black
+                                                : Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 24),
                       const Text(

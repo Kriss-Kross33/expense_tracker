@@ -109,7 +109,7 @@ class LoginScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Dont\'t have an account?',
+                          'Don\'t have an account?',
                           style: Theme.of(context)
                               .textTheme
                               .titleMedium
@@ -120,11 +120,14 @@ class LoginScreen extends StatelessWidget {
                         TextButton(
                           child: Text(
                             'Sign up',
-                            style:
-                                Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                      color: ColorConsts.black,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge
+                                ?.copyWith(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w700,
+                                ),
                           ),
                           onPressed: () =>
                               context.push(RouteConsts.signupRoute),

@@ -20,6 +20,9 @@ class _PasswordTextFieldState extends State<_PasswordTextField> {
             CustomTextField(
               obscureText: showPassword ? false : true,
               textFieldkey: const Key('__passwordLoginTextField'),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
               isValid: state.password.displayError != null ? false : null,
               hintText: 'Enter your password',
               keyboardType: TextInputType.visiblePassword,

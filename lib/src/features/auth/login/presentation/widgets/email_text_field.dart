@@ -13,6 +13,9 @@ class _EmailTextField extends StatelessWidget {
           children: [
             CustomTextField(
               textFieldkey: const Key('__emailLoginTextField'),
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
               isValid: state.email.displayError != null ? false : null,
               hintText: 'Enter your email',
               keyboardType: TextInputType.emailAddress,

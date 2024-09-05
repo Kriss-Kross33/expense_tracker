@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:expense_api/expense_api.dart';
+import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/common/widgets/empty_state.dart';
 import 'package:expense_track/src/common/widgets/error_state.dart';
 import 'package:flutter/material.dart';
@@ -78,44 +79,71 @@ class ExpenditureListView extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: itemColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ListTile(
-                              contentPadding:
-                                  const EdgeInsets.only(left: 0.0, right: 0.0),
-                              leading: CircleAvatar(
-                                backgroundColor: itemColor,
-                                child: Text(
-                                  expenditure.nameOfItem[0].toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(
-                                        color: Colors.white,
-                                      ),
+                          child: BlocBuilder<ThemeCubit, ThemeState>(
+                            builder: (context, themeState) {
+                              return Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  color: itemColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                              ),
-                              title: Text(
-                                expenditure.nameOfItem,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
+                                child: ListTile(
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 0.0, right: 0.0),
+                                  leading: CircleAvatar(
+                                    backgroundColor: itemColor,
+                                    child: Text(
+                                      expenditure.nameOfItem[0].toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                          ),
                                     ),
-                              ),
-                              subtitle: Text(
-                                  'Amount: \$${expenditure.estimatedAmount.toStringAsFixed(2)}'),
-                              trailing: Text(
-                                expenditure.category,
-                                style: TextStyle(color: Colors.grey[600]),
-                              ),
-                            ),
+                                  ),
+                                  title: Text(
+                                    expenditure.nameOfItem,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          color: themeState.themeMode ==
+                                                  AppThemeMode.lightMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                  subtitle: Text(
+                                    expenditure.category,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          color: themeState.themeMode ==
+                                                  AppThemeMode.lightMode
+                                              ? Colors.grey[600]
+                                              : Colors.grey[300],
+                                        ),
+                                  ),
+                                  trailing: Text(
+                                    'GH¢${expenditure.estimatedAmount.toStringAsFixed(2)}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.copyWith(
+                                          color: themeState.themeMode ==
+                                                  AppThemeMode.lightMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );
