@@ -11,35 +11,6 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
         super(const ExpenseApiState());
   final ExpenseApiRepository _expenseApiRepository;
 
-  Future<void> login(LoginModel loginModel) async {
-    try {
-      emit(state.copyWith(status: ExpenseApiStatus.loading));
-      await _expenseApiRepository.login(loginModel: loginModel);
-      emit(state.copyWith(status: ExpenseApiStatus.success));
-    } catch (e) {
-      emit(state.copyWith(
-          status: ExpenseApiStatus.failure, errorMessage: e.toString()));
-    }
-    final result = await _expenseApiRepository.login(loginModel: loginModel);
-    // result.fold(
-    //   (failure) => emit(state.copyWith(
-    //       status: ExpenseApiStatus.failure,
-    //       errorMessage: failure.errorMessage)),
-    //   (_) => emit(state.copyWith(status: ExpenseApiStatus.success)),
-    // );
-  }
-
-  Future<void> signup(SignupModel signupModel) async {
-    emit(state.copyWith(status: ExpenseApiStatus.loading));
-    final result = await _expenseApiRepository.signup(signupModel: signupModel);
-    result.fold(
-      (failure) => emit(state.copyWith(
-          status: ExpenseApiStatus.failure,
-          errorMessage: failure.errorMessage)),
-      (_) => emit(state.copyWith(status: ExpenseApiStatus.success)),
-    );
-  }
-
   Future<void> addExpense({required Expense expense}) async {
     emit(state.copyWith(status: ExpenseApiStatus.loading));
     final result = await _expenseApiRepository.addExpense(expense: expense);
@@ -47,10 +18,14 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
       (failure) => emit(state.copyWith(
           status: ExpenseApiStatus.failure,
           errorMessage: failure.errorMessage)),
-      (_) {
+      (_) async {
         emit(state.copyWith(status: ExpenseApiStatus.success));
+        await Future.delayed(const Duration(milliseconds: 100), () {
+          getExpenses();
+        });
       },
     );
+    //  await getExpenses();
   }
 
   Future<void> addIncome({required Income income}) async {
@@ -60,10 +35,14 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
       (failure) => emit(state.copyWith(
           status: ExpenseApiStatus.failure,
           errorMessage: failure.errorMessage)),
-      (_) {
+      (_) async {
         emit(state.copyWith(status: ExpenseApiStatus.success));
+        await Future.delayed(const Duration(milliseconds: 100), () {
+          getIncome();
+        });
       },
     );
+    // await getIncome();
   }
 
   Future<void> deleteExpense(String expenseId) async {
@@ -75,8 +54,12 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
           errorMessage: failure.errorMessage)),
       (_) async {
         emit(state.copyWith(status: ExpenseApiStatus.success));
+        await Future.delayed(const Duration(milliseconds: 100), () {
+          getExpenses();
+        });
       },
     );
+    // await getExpenses();
   }
 
   Future<void> deleteIncome(String incomeId) async {
@@ -88,8 +71,12 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
           errorMessage: failure.errorMessage)),
       (_) async {
         emit(state.copyWith(status: ExpenseApiStatus.success));
+        await Future.delayed(const Duration(seconds: 2), () {
+          getIncome();
+        });
       },
     );
+    // await getIncome();
   }
 
   Future<void> getExpenses() async {
@@ -105,8 +92,6 @@ class ExpenseApiCubit extends Cubit<ExpenseApiState> {
           final estimatedAmount = item.estimatedAmount;
           if (estimatedAmount is num) {
             totalExpense += estimatedAmount.toDouble();
-          } else if (estimatedAmount is String) {
-            totalExpense += double.parse(estimatedAmount);
           }
         }
 
