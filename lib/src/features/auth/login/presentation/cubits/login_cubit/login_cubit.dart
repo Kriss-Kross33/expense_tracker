@@ -51,15 +51,21 @@ class LoginCubit extends Cubit<LoginState> {
     if (!state.isValid) return;
     try {
       emit(state.copyWith(status: FormzSubmissionStatus.inProgress));
-      await _expenseApiRepository.login(
+      final eitherFailureOrSuccess = await _expenseApiRepository.login(
         loginModel: LoginModel(
           email: state.email.value,
           password: state.password.value,
         ),
       );
-      emit(
-        state.copyWith(
-          status: FormzSubmissionStatus.success,
+      eitherFailureOrSuccess.fold(
+        (failure) => emit(
+          state.copyWith(
+            errorMessage: failure.errorMessage,
+            status: FormzSubmissionStatus.failure,
+          ),
+        ),
+        (_) => emit(
+          state.copyWith(status: FormzSubmissionStatus.success),
         ),
       );
     } on ServerException catch (e) {

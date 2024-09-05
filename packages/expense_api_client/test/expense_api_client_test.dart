@@ -59,22 +59,6 @@ void main() {
       expect(result, equals({'data': 'test'}));
     });
 
-    test('post throws ServerException', () async {
-      final response = Response('{"data": "test"}', 200);
-      final model = MockModel();
-
-      when(() => mockSecureStorageRepository.read(key: any(named: 'key')))
-          .thenAnswer((_) async => 'token');
-      when(() => mockClient.post(any(),
-          headers: any(named: 'headers'),
-          body: any(named: 'body'))).thenAnswer((_) async => response);
-
-      expect(
-        () => expenseApiClient.post(endpoint: '/test', model: model),
-        throwsA(isA<ServerException>()),
-      );
-    });
-
     test('post throws ServerException on failed request', () async {
       final response = Response('', 400);
       final model = MockModel();
@@ -117,6 +101,22 @@ void main() {
 
       expect(() => expenseApiClient.delete(endpoint: '/test'),
           throwsA(isA<ServerException>()));
+    });
+
+    test('post throws ServerException on unauthorized request', () async {
+      final response = Response('{"error": "Unauthorized"}', 401);
+      final model = MockModel();
+
+      when(() => mockSecureStorageRepository.read(key: any(named: 'key')))
+          .thenAnswer((_) async => 'token');
+      when(() => mockClient.post(any(),
+          headers: any(named: 'headers'),
+          body: any(named: 'body'))).thenAnswer((_) async => response);
+
+      expect(
+        () => expenseApiClient.post(endpoint: '/test', model: model),
+        throwsA(isA<ServerException>()),
+      );
     });
   });
 }
