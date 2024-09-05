@@ -13,7 +13,6 @@ class DoubleField extends FormzInput<double, DoubleFieldValidationError> {
     final hasValue = _doubleRegExp.hasMatch(value.toString())
         ? null
         : DoubleFieldValidationError.invalid;
-    print(hasValue);
     return hasValue;
   }
 }
