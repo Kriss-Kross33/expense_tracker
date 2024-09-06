@@ -14,6 +14,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.ignoring = false,
     this.readOnly = false,
+    this.controller,
+    this.onTap,
     required this.textFieldkey,
     this.onChanged,
     this.prefixIcon,
@@ -67,8 +69,14 @@ class CustomTextField extends StatelessWidget {
   /// Constraints for the [prefixIcon]
   final BoxConstraints? prefixIconConstraints;
 
+  /// Callback which listens for change in text input.
+  final VoidCallback? onTap;
+
   /// Constranints for the [suffixIcon]
   final BoxConstraints? suffixIconConstraints;
+
+  /// Controller for the text field
+  final TextEditingController? controller;
 
   /// Callback which listens for change in text input.
   final ValueChanged<String>? onChanged;
@@ -102,6 +110,9 @@ class CustomTextField extends StatelessWidget {
               ),
               child: TextFormField(
                 key: textFieldkey,
+                onTap: onTap,
+                controller: controller,
+                readOnly: readOnly,
                 obscureText: obscureText,
                 onChanged: onChanged,
                 keyboardType: keyboardType,
@@ -131,6 +142,7 @@ class CustomTextField extends StatelessWidget {
           : TextField(
               key: textFieldkey,
               readOnly: readOnly,
+              controller: controller,
               textAlign: TextAlign.left,
               obscureText: obscureText,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(

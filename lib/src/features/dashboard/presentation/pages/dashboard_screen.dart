@@ -1,11 +1,13 @@
 import 'dart:math';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expense_api/expense_api.dart';
 import 'package:expense_track/src/common/blocs/expense_cubit/expense_cubit.dart';
 import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/common/widgets/empty_state.dart';
 import 'package:expense_track/src/common/widgets/error_state.dart';
 import 'package:expense_track/src/core/core.dart';
+import 'package:expense_track/src/features/dashboard/presentation/cubits/category_cubit/category_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -314,97 +316,185 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       : Colors.black.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child:
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                height: 300,
+                                viewportFraction: 1.0,
+                                enlargeCenterPage: false,
+                                enableInfiniteScroll: false,
+                              ),
+                              items: [
+                                // Income vs Expenses Chart
                                 BlocBuilder<ExpenseApiCubit, ExpenseApiState>(
-                              builder: (context, state) {
-                                final totalIncome = state.totalIncome;
-                                final totalExpense = state.totalExpense;
-                                final total = totalIncome + totalExpense;
-                                final incomePercentage = total > 0
-                                    ? (totalIncome / total * 100).round()
-                                    : 0;
-                                final expensePercentage = total > 0
-                                    ? (totalExpense / total * 100).round()
-                                    : 0;
+                                  builder: (context, state) {
+                                    final totalIncome = state.totalIncome;
+                                    final totalExpense = state.totalExpense;
+                                    final total = totalIncome + totalExpense;
+                                    final incomePercentage = total > 0
+                                        ? (totalIncome / total * 100).round()
+                                        : 0;
+                                    final expensePercentage = total > 0
+                                        ? (totalExpense / total * 100).round()
+                                        : 0;
 
-                                return SfCircularChart(
-                                  title: ChartTitle(
-                                    text: 'Income vs Expenses',
-                                    textStyle: TextStyle(
-                                      color: themestate.themeMode ==
-                                              AppThemeMode.lightMode
-                                          ? Colors.black
-                                          : Colors.white,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  legend: const Legend(
-                                      isVisible: true,
-                                      position: LegendPosition.bottom),
-                                  series: <CircularSeries>[
-                                    DoughnutSeries<FinancialData, String>(
-                                      innerRadius: '70%',
-                                      radius: '95%',
-                                      dataSource: [
-                                        FinancialData(
-                                            category: 'Income',
-                                            percentage: incomePercentage,
-                                            color: themestate.themeMode ==
-                                                    AppThemeMode.lightMode
-                                                ? const Color(0xFF0e6085)
-                                                : const Color(0xFF0e6085)),
-                                        FinancialData(
-                                            category: 'Expenses',
-                                            percentage: expensePercentage,
-                                            color: themestate.themeMode ==
-                                                    AppThemeMode.lightMode
-                                                ? const Color(0xFFdf6188)
-                                                : const Color(0xFFdf6188)),
-                                      ],
-                                      xValueMapper: (FinancialData data, _) =>
-                                          data.category,
-                                      yValueMapper: (FinancialData data, _) =>
-                                          data.percentage,
-                                      pointColorMapper:
-                                          (FinancialData data, _) => data.color,
-                                      dataLabelMapper: (FinancialData data,
-                                              _) =>
-                                          '${data.category}\n${data.percentage}%',
-                                      dataLabelSettings: DataLabelSettings(
-                                        isVisible: true,
-                                        labelPosition:
-                                            ChartDataLabelPosition.outside,
+                                    return SfCircularChart(
+                                      title: ChartTitle(
+                                        text: 'Income vs Expenses',
                                         textStyle: TextStyle(
                                           color: themestate.themeMode ==
                                                   AppThemeMode.lightMode
                                               ? Colors.black
                                               : Colors.white,
-                                          fontSize: 12,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                  annotations: <CircularChartAnnotation>[
-                                    CircularChartAnnotation(
-                                      widget: Container(
-                                        child: Text(
-                                          'Total\nGH¢${total.toStringAsFixed(2)}',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: themestate.themeMode ==
-                                                    AppThemeMode.lightMode
-                                                ? Colors.black
-                                                : Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
+                                      legend: const Legend(
+                                          isVisible: true,
+                                          position: LegendPosition.bottom),
+                                      series: <CircularSeries>[
+                                        DoughnutSeries<FinancialData, String>(
+                                          innerRadius: '70%',
+                                          radius: '95%',
+                                          dataSource: [
+                                            FinancialData(
+                                                category: 'Income',
+                                                percentage: incomePercentage,
+                                                color: themestate.themeMode ==
+                                                        AppThemeMode.lightMode
+                                                    ? const Color(0xFF0e6085)
+                                                    : const Color(0xFF0e6085)),
+                                            FinancialData(
+                                                category: 'Expenses',
+                                                percentage: expensePercentage,
+                                                color: themestate.themeMode ==
+                                                        AppThemeMode.lightMode
+                                                    ? const Color(0xFFdf6188)
+                                                    : const Color(0xFFdf6188)),
+                                          ],
+                                          xValueMapper:
+                                              (FinancialData data, _) =>
+                                                  data.category,
+                                          yValueMapper:
+                                              (FinancialData data, _) =>
+                                                  data.percentage,
+                                          pointColorMapper:
+                                              (FinancialData data, _) =>
+                                                  data.color,
+                                          dataLabelMapper: (FinancialData data,
+                                                  _) =>
+                                              '${data.category}\n${data.percentage}%',
+                                          dataLabelSettings: DataLabelSettings(
+                                            isVisible: true,
+                                            labelPosition:
+                                                ChartDataLabelPosition.outside,
+                                            textStyle: TextStyle(
+                                              color: themestate.themeMode ==
+                                                      AppThemeMode.lightMode
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ),
+                                      ],
+                                      annotations: <CircularChartAnnotation>[
+                                        CircularChartAnnotation(
+                                          widget: Container(
+                                            child: Text(
+                                              'Total\nGH¢${total.toStringAsFixed(2)}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: themestate.themeMode ==
+                                                        AppThemeMode.lightMode
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                // Expenses by Category Chart
+                                BlocBuilder<ExpenseApiCubit, ExpenseApiState>(
+                                  builder: (context, state) {
+                                    var expensesByCategory =
+                                        state.allCategories;
+                                    if (expensesByCategory.length > 7) {
+                                      var sortedExpenses = expensesByCategory
+                                        ..sort((a, b) =>
+                                            b.amount.compareTo(a.amount));
+                                      var topExpenses =
+                                          sortedExpenses.take(6).toList();
+                                      var otherExpenses =
+                                          sortedExpenses.skip(6);
+                                      var otherTotal = otherExpenses.fold(0.0,
+                                          (sum, item) => sum + item.amount);
+                                      topExpenses.add(CategoryExpense(
+                                          category: 'Other',
+                                          amount: otherTotal));
+                                      expensesByCategory =
+                                          List.from(topExpenses);
+                                    }
+
+                                    return SfCircularChart(
+                                      title: ChartTitle(
+                                        text: 'Expenses by Category',
+                                        textStyle: TextStyle(
+                                          color: themestate.themeMode ==
+                                                  AppThemeMode.lightMode
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
+                                      legend: const Legend(
+                                          isVisible: true,
+                                          position: LegendPosition.bottom),
+                                      series: <CircularSeries>[
+                                        PieSeries<MapEntry<String, double>,
+                                            String>(
+                                          dataSource: expensesByCategory
+                                              .map((e) => MapEntry(
+                                                  e.category, e.amount))
+                                              .toList(),
+                                          xValueMapper:
+                                              (MapEntry<String, double> data,
+                                                      _) =>
+                                                  data.key,
+                                          yValueMapper:
+                                              (MapEntry<String, double> data,
+                                                      _) =>
+                                                  data.value,
+                                          dataLabelMapper: (MapEntry<String,
+                                                          double>
+                                                      data,
+                                                  _) =>
+                                              '${data.key}\n${(data.value / state.totalExpense * 100).toStringAsFixed(1)}%',
+                                          dataLabelSettings: DataLabelSettings(
+                                            isVisible: true,
+                                            labelPosition:
+                                                ChartDataLabelPosition.outside,
+                                            textStyle: TextStyle(
+                                              color: themestate.themeMode ==
+                                                      AppThemeMode.lightMode
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                // Add a third chart here if needed
+                              ],
                             ),
                           );
                         },

@@ -1,6 +1,6 @@
 import 'package:expense_track/src/core/constants/route_consts.dart';
 import 'package:expense_track/src/features/features.dart';
-import 'package:expense_track/src/features/home/home_screen.dart';
+import 'package:expense_track/src/features/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

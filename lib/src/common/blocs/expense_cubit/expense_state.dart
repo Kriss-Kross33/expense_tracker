@@ -28,6 +28,7 @@ final class ExpenseApiState extends Equatable {
     this.totalExpense = 0,
     this.totalIncome = 0,
     this.balance = 0,
+    this.allCategories = const [],
   });
 
   final ExpenseApiStatus status;
@@ -41,6 +42,7 @@ final class ExpenseApiState extends Equatable {
   final double totalExpense;
   final double totalIncome;
   final double balance;
+  final List<CategoryExpense> allCategories;
 
   ExpenseApiState copyWith({
     ExpenseApiStatus? status,
@@ -53,6 +55,7 @@ final class ExpenseApiState extends Equatable {
     double? totalExpense,
     double? totalIncome,
     double? balance,
+    List<CategoryExpense>? allCategories,
   }) {
     return ExpenseApiState(
       status: status ?? this.status,
@@ -65,6 +68,7 @@ final class ExpenseApiState extends Equatable {
       totalExpense: totalExpense ?? this.totalExpense,
       totalIncome: totalIncome ?? this.totalIncome,
       balance: balance ?? this.balance,
+      allCategories: allCategories ?? this.allCategories,
     );
   }
 
@@ -80,5 +84,19 @@ final class ExpenseApiState extends Equatable {
         totalExpense,
         totalIncome,
         balance,
+        allCategories,
       ];
+}
+
+class CategoryExpense extends Equatable {
+  /// The category name
+  final String category;
+
+  /// The amount of the expense for the category
+  final double amount;
+
+  const CategoryExpense({required this.category, required this.amount});
+
+  @override
+  List<Object?> get props => [category, amount];
 }
