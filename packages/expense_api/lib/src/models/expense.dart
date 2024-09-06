@@ -15,7 +15,7 @@ class Expense extends Equatable {
   /// The category of the expense
   final String category;
   final String nameOfItem;
-  final dynamic estimatedAmount;
+  final double estimatedAmount;
 
   const Expense({
     this.id,

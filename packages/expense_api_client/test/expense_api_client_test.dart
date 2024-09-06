@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:errors/errors.dart';
 import 'package:expense_api_client/expense_api_client.dart';
@@ -42,7 +43,7 @@ void main() {
 
       final result = await expenseApiClient.get(endpoint: '/test');
 
-      expect(result, equals({'data': 'test'}));
+      expect(result.body, equals('{"data": "test"}', 200));
     });
 
     test('postAuth returns data on successful request', () async {
@@ -56,7 +57,7 @@ void main() {
       final result =
           await expenseApiClient.postAuth(endpoint: '/test', model: model);
 
-      expect(result, equals({'data': 'test'}));
+      expect(jsonDecode(result.body), equals({'data': 'test'}));
     });
 
     test('post throws ServerException on failed request', () async {
