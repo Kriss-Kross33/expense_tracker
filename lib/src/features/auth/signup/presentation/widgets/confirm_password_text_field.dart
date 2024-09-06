@@ -23,8 +23,14 @@ class _ConfirmPasswordTextFieldState extends State<_ConfirmPasswordTextField> {
           children: [
             CustomTextField(
               textFieldkey: const Key('__confirmPasswordSignupTextField'),
+              obscureText: true,
               isValid:
                   state.confirmPassword.displayError != null ? false : null,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
               suffixIcon: IconButton(
                 onPressed: () => setState(() => showPassword = !showPassword),
                 icon: Icon(

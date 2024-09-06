@@ -9,16 +9,20 @@ class _FirstNameTextField extends StatelessWidget {
       buildWhen: (previous, current) => previous.name != current.name,
       builder: (context, state) {
         return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
               textFieldkey: const Key('__fullNameSignupTextField'),
               isValid: state.name.displayError != null ? false : null,
               hintText: 'Enter your full name',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
               keyboardType: TextInputType.name,
               onChanged: (String usernameString) =>
                   context.read<SignupCubit>().onUsernameInput(usernameString),
-              errorText:
-                  state.name.displayError != null ? 'Enter a valid name' : null,
             ),
             SizedBox(
               child: state.name.displayError == null

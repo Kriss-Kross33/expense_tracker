@@ -19,6 +19,11 @@ class _EmailTextFieldState extends State<_EmailTextField> {
             CustomTextField(
               textFieldkey: const Key('__emailSignupTextField'),
               isValid: state.email.displayError != null ? false : null,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
               hintText: 'Enter your email',
               keyboardType: TextInputType.emailAddress,
               onChanged: (String emailString) =>

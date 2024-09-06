@@ -48,11 +48,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     Center(
                       child: Text(
                         'Sign up',
-                        style:
-                            Theme.of(context).textTheme.displayLarge?.copyWith(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                        style: Theme.of(context)
+                            .textTheme
+                            .displayLarge
+                            ?.copyWith(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w800,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                       ),
                     ),
                     const Gap(10),
@@ -63,7 +66,10 @@ class _SignupScreenState extends State<SignupScreen> {
                             .textTheme
                             .titleMedium
                             ?.copyWith(
-                                fontSize: 14, fontWeight: FontWeight.w400),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
                       ),
                     ),
                     const Gap(20),

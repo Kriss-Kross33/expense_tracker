@@ -20,8 +20,14 @@ class _PasswordTextFieldState extends State<_PasswordTextField> {
           children: [
             CustomTextField(
               textFieldkey: const Key('__passwordSignupTextField'),
+              obscureText: true,
               isValid: state.password.displayError != null ? false : null,
               hintText: 'Enter your password',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                  ),
               keyboardType: TextInputType.visiblePassword,
               onChanged: (String passwordString) =>
                   context.read<SignupCubit>().onPasswordInput(passwordString),
