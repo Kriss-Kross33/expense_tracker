@@ -1,4 +1,4 @@
-part of '../pages/login_screen.dart';
+part of 'login_form.dart';
 
 class _EmailTextField extends StatelessWidget {
   const _EmailTextField();

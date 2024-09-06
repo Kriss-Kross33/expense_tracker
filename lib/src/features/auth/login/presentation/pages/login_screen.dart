@@ -1,17 +1,11 @@
 import 'package:expense_api_repository/expense_api_repository.dart';
-import 'package:expense_track/src/common/common.dart';
 import 'package:expense_track/src/core/core.dart';
 import 'package:expense_track/src/features/auth/auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:expense_track/src/features/auth/login/presentation/widgets/login_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:formz/formz.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-
-part '../widgets/email_text_field.dart';
-part '../widgets/login_button.dart';
-part '../widgets/password_text_field.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -81,22 +75,10 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                     const Gap(4),
-                    const _EmailTextField(),
-                    const Gap(15),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: Text(
-                        'Password',
-                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            ),
-                      ),
+                    LoginForm(
+                      key: const Key('__loginForm'),
+                      constraints: constraints,
                     ),
-                    const Gap(4),
-                    const _PasswordTextField(),
-                    const Gap(44),
-                    _LoginButton(constraints: constraints),
                     const Gap(10),
                     const Row(
                       children: [
@@ -118,6 +100,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                         ),
                         TextButton(
+                          key: const Key('__routeTosignupButton'),
                           child: Text(
                             'Sign up',
                             style: Theme.of(context)

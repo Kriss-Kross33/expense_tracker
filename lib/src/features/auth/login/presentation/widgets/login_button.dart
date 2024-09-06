@@ -1,4 +1,4 @@
-part of '../pages/login_screen.dart';
+part of 'login_form.dart';
 
 class _LoginButton extends StatelessWidget {
   const _LoginButton({required this.constraints});
@@ -36,6 +36,7 @@ class _LoginButton extends StatelessWidget {
             child: BlocBuilder<LoginCubit, LoginState>(
               builder: (context, state) {
                 return ElevatedButton(
+                  key: const Key('__loginButton'),
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),

@@ -1,4 +1,4 @@
-part of '../pages/signup_screen.dart';
+part of 'signup_form.dart';
 
 class _PasswordTextField extends StatefulWidget {
   const _PasswordTextField();

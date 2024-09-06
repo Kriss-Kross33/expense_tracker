@@ -1,4 +1,4 @@
-part of '../pages/signup_screen.dart';
+part of 'signup_form.dart';
 
 class _SignupButton extends StatelessWidget {
   const _SignupButton({required this.constraints});
